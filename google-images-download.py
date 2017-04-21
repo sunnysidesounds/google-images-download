@@ -4,6 +4,7 @@
 
 import time       #Importing the time library to check the time of code execution
 import sys    #Importing the System Library
+import os
 
 import urllib2
 
@@ -385,28 +386,30 @@ k=0
 kl=0
 errorCount=0
 
+print keyword_list
+
 while(k<len(full_item_list)):
     from urllib2 import Request,urlopen
     from urllib2 import URLError, HTTPError
 
     try:
-        print "  link : " + full_item_list[k]
-        if full_item_list[k] == "end":
-            folder = keyword_list[kl]
-            print "  folder : " + folder
-            create_directory("images/" + folder)
-            continue
+        print "Downloading link : " + full_item_list[k]
+        if full_item_list[k] == 'end':
+            kl = kl + 1
 
-        req = Request(full_item_list[k], headers={"User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"})
-        response = urlopen(req)
+        else:
 
-        #create_directory("images/")
-        output_file = open("images/" + keyword_list[kl] + "/" + str(k+1)+".jpg",'wb')
-        data = response.read()
-        output_file.write(data)
-        response.close();
+            req = Request(full_item_list[k], headers={"User-Agent": "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17"})
+            response = urlopen(req)
 
-        print("completed ====> "+str(k+1))
+            print "  folder : " + keyword_list[kl]
+            create_directory("images/" + keyword_list[kl])
+            output_file = open("images/" + keyword_list[kl] + "/" + keyword_list[kl]+"_"+str(k+1)+".jpg",'wb')
+            data = response.read()
+            output_file.write(data)
+            response.close();
+
+            print("  completed ====> "+str(k+1))
 
         k=k+1;
 
